@@ -13,6 +13,7 @@ public class Settings extends JDialog {
     private JButton fontButton;
     private JTextField incrementKey;
     private JTextField color;
+    private JCheckBox globalHotkey;
     private FontChooser fontChooser;
 
     private KeyStroke hotkey;
@@ -67,6 +68,7 @@ public class Settings extends JDialog {
         });
 
         hotkey = caller.hotkey;
+        globalHotkey.setSelected(caller.global);
         incrementKey.setText(saneString(caller.hotkey));
         incrementKey.addMouseListener(new MouseAdapter() {
             @Override
@@ -107,7 +109,7 @@ public class Settings extends JDialog {
     }
 
     private void onOK() {
-        caller.setSettings(prefix.getText(), fontChooser.getSelectedFont(), chosenColor, hotkey);
+        caller.setSettings(prefix.getText(), fontChooser.getSelectedFont(), chosenColor, hotkey, globalHotkey.isSelected());
         dispose();
     }
 

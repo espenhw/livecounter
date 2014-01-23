@@ -6,6 +6,8 @@
         <element id="file-copy" path="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" />
       </element>
       <element id="module-output" name="LiveCounter" />
+      <element id="dir-copy" path="$PROJECT_DIR$/lib/dll" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/jintellitype-1.3.9.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

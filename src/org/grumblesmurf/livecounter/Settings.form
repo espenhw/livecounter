@@ -133,6 +133,15 @@
               <text value="Choose..."/>
             </properties>
           </component>
+          <component id="cdafc" class="javax.swing.JCheckBox" binding="globalHotkey">
+            <constraints>
+              <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <gridbag weightx="0.0" weighty="0.0"/>
+            </constraints>
+            <properties>
+              <text value="Global"/>
+            </properties>
+          </component>
         </children>
       </grid>
     </children>

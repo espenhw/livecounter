@@ -1,5 +1,8 @@
 package org.grumblesmurf.livecounter;
 
+import com.melloware.jintellitype.HotkeyListener;
+import com.melloware.jintellitype.JIntellitype;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -9,19 +12,20 @@ import java.awt.event.MouseEvent;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Main extends JFrame {
+public class Main extends JFrame implements HotkeyListener {
     private JPanel contentPane;
     private int value = 0;
     JLabel counter;
     JLabel prefix;
 
     KeyStroke hotkey;
+    boolean global;
     Font font;
     Color color;
 
     private Set<JComponent> textElements = new HashSet<JComponent>();
 
-    public Main(String prefixText, Font font, Color color, KeyStroke hotkey) {
+    public Main(String prefixText, Font font, Color color, KeyStroke hotkey, boolean global) {
         super("LiveCounter");
 
         setContentPane(contentPane);
@@ -47,22 +51,34 @@ public class Main extends JFrame {
 
         counter.setText(String.valueOf(value));
 
-        setSettings(prefixText, font, color, hotkey);
+        setSettings(prefixText, font, color, hotkey, global);
     }
 
-    void setHotkey(KeyStroke hotkey) {
+    void setHotkey(KeyStroke hotkey, boolean global) {
         contentPane.unregisterKeyboardAction(this.hotkey);
+        JIntellitype.getInstance().unregisterHotKey(1);
+        JIntellitype.getInstance().removeHotKeyListener(this);
         this.hotkey = hotkey;
+        this.global = global;
         contentPane.registerKeyboardAction(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                counter.setText(String.valueOf(++value));
-                Main.this.pack();
+                increment();
             }
         }, hotkey, JComponent.WHEN_IN_FOCUSED_WINDOW);
+
+        if (global) {
+            JIntellitype.getInstance().registerSwingHotKey(1, hotkey.getModifiers(), hotkey.getKeyCode());
+            JIntellitype.getInstance().addHotKeyListener(this);
+        }
     }
 
-    void setSettings(String prefixText, Font font, Color color, KeyStroke hotkey) {
+    private void increment() {
+        counter.setText(String.valueOf(++value));
+        pack();
+    }
+
+    void setSettings(String prefixText, Font font, Color color, KeyStroke hotkey, boolean global) {
         this.color = color;
         this.font = font;
 
@@ -71,8 +87,13 @@ public class Main extends JFrame {
             c.setFont(font);
             c.setForeground(color);
         }
-        setHotkey(hotkey);
-        LiveCounter.setSettings(prefixText, font, color, hotkey);
+        setHotkey(hotkey, global);
+        LiveCounter.setSettings(prefixText, font, color, hotkey, global);
         pack();
+    }
+
+    @Override
+    public void onHotKey(int identifier) {
+        increment();
     }
 }
